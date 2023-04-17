@@ -1,0 +1,8 @@
+query StudentList {
+    students {
+        lastName
+        studentId
+        firstName
+        points
+    }
+}

@@ -1,0 +1,180 @@
+type Query {
+  studentById(studentId: Int): StudentType
+  eventById(id: ID): EventType
+  prizeById(id: ID): PrizeType
+  gradeByGraduationYear(graduationYear: Int): String
+  graduationYearByGrade(grade: String): Int
+  eventsByLocation(location: String): [EventType]
+  eventsByStudent(studentId: Int): [EventType]
+  studentsByEventId(eventId: Int): [StudentType]
+  studentByUsername(email: String): StudentType
+  events: [EventType]
+  students: [StudentType]
+  prizes: [PrizeType]
+  gradePoints: GradePoints
+  randomStudentByGraduationYear(graduationYear: Int): StudentType
+  studentWithMaxPointsByGraduationYear(graduationYear: Int): StudentType
+  validateStaffByCredentials(email: String, password: String): Boolean
+}
+
+type StudentType {
+  studentId: Int!
+  lastName: String!
+  firstName: String!
+  points: Int!
+  eventsAttended: Int!
+  graduationYear: Int!
+  email: String
+}
+
+type EventType {
+  id: ID!
+  name: String!
+  location: String!
+  startTime: DateTime!
+  endTime: DateTime!
+  attendees: [StudentType!]!
+  points: Int!
+  elapsed: Boolean!
+  isRecurring: Boolean!
+
+  """"""
+  relapseTime: BigInt
+  totalCount: Int
+  pastCount: Int
+  checkinOpen: Boolean
+}
+
+"""
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime
+
+"""
+The `BigInt` scalar type represents non-fractional whole numeric values.
+`BigInt` is not constrained to 32-bit like the `Int` type and thus is a less
+compatible type.
+"""
+scalar BigInt
+
+type PrizeType {
+  id: ID!
+  name: String!
+  description: String!
+  image: String
+  student: StudentType
+}
+
+type GradePoints {
+  freshman: Int
+  sophomore: Int
+  junior: Int
+  senior: Int
+}
+
+type Mutation {
+  """Obtain JSON Web Token mutation"""
+  tokenAuth(username: String!, password: String!): ObtainJSONWebToken
+  verifyToken(token: String): Verify
+  refreshToken(token: String): Refresh
+  createEvent(endTime: DateTime!, isRecurring: Boolean!, location: String!, name: String!, pastCount: Int, startTime: DateTime!, totalCount: Int): CreateEventMutation
+  createStudent(email: String!, firstName: String!, graduationYear: Int!, lastName: String!, password: String!, studentId: Int!): CreateStudentMutation
+  updateEvent(endTime: DateTime, id: ID!, isRecurring: Boolean, location: String, name: String, pastCount: Int, startTime: DateTime, totalCount: Int): UpdateEventMutation
+  forceUpdateEventPoints: ForceUpdateEventPointsMutation
+  updateStudent(firstName: String, graduationYear: Int, lastName: String, studentId: Int!): UpdateStudentMutation
+  addStudentToEvent(eventId: ID!, studentId: Int!): AddStudentToEventMutation
+  removeStudentFromEvent(eventId: ID!, studentId: Int!): RemoveStudentFromEventMutation
+  deleteStudent(studentId: Int!): DeleteStudentMutation
+  deleteEvent(id: ID!): DeleteEventMutation
+  createPrize(description: String!, image: Upload, name: String!, studentId: Int): CreatePrizeMutation
+  updatePrize(description: String, id: ID!, image: Upload, name: String, studentId: Int): UpdatePrizeMutation
+  deletePrize(id: ID!): DeletePrizeMutation
+  endEventEarly(id: ID!): EndEventEarlyMutation
+}
+
+"""Obtain JSON Web Token mutation"""
+type ObtainJSONWebToken {
+  payload: GenericScalar!
+  refreshExpiresIn: Int!
+  token: String!
+}
+
+"""
+The `GenericScalar` scalar type represents a generic
+GraphQL scalar value that could be:
+String, Boolean, Int, Float, List or Object.
+"""
+scalar GenericScalar
+
+type Verify {
+  payload: GenericScalar!
+}
+
+type Refresh {
+  payload: GenericScalar!
+  refreshExpiresIn: Int!
+  token: String!
+}
+
+type CreateEventMutation {
+  event: EventType
+}
+
+type CreateStudentMutation {
+  student: StudentType
+  token: String
+}
+
+type UpdateEventMutation {
+  event: EventType
+}
+
+type ForceUpdateEventPointsMutation {
+  success: Boolean
+}
+
+type UpdateStudentMutation {
+  student: StudentType
+}
+
+type AddStudentToEventMutation {
+  event: EventType
+  student: StudentType
+}
+
+type RemoveStudentFromEventMutation {
+  event: EventType
+  student: StudentType
+}
+
+type DeleteStudentMutation {
+  student: StudentType
+}
+
+type DeleteEventMutation {
+  event: EventType
+}
+
+type CreatePrizeMutation {
+  prize: PrizeType
+}
+
+"""
+Create scalar that ignores normal serialization/deserialization, since
+that will be handled by the multipart request spec
+"""
+scalar Upload
+
+type UpdatePrizeMutation {
+  prize: PrizeType
+}
+
+type DeletePrizeMutation {
+  prize: PrizeType
+}
+
+type EndEventEarlyMutation {
+  event: EventType
+}
