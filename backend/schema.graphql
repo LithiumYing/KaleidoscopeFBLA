@@ -1,0 +1,220 @@
+type Query {
+  studentById(studentId: Int): StudentType
+  eventById(id: ID): EventType
+  prizeById(id: ID): PrizeType
+  gradeByGraduationYear(graduationYear: Int): String
+  graduationYearByGrade(grade: String): Int
+  eventsByLocation(location: String): [EventType]
+  eventsByStudent(studentId: Int): [EventType]
+  studentsByEventId(eventId: Int): [StudentType]
+  studentByUsername(email: String): StudentType
+  events: [EventType]
+  students: [StudentType]
+  prizes: [PrizeType]
+  gradePoints: GradePoints
+  randomStudentByGraduationYear(graduationYear: Int): StudentType
+  studentWithMaxPointsByGraduationYear(graduationYear: Int): StudentType
+  validateStaffByCredentials(email: String, password: String): Boolean
+  studentByToken(token: String): StudentType
+  availableStudentByStudentId(studentId: Int): AvailableStudentType
+  availableStudents: [AvailableStudentType]
+  bonusPointsByStudentId(studentId: Int): [BonusPointsType]
+}
+
+type StudentType {
+  studentId: Int!
+  lastName: String!
+  firstName: String!
+  graduationYear: Int!
+  eventsAttended: Int!
+  email: String!
+  qrcode: String!
+  points: Int!
+}
+
+type EventType {
+  id: ID!
+  name: String!
+  location: String!
+  startTime: DateTime!
+  endTime: DateTime!
+  attendees: [StudentType!]!
+  points: Int!
+  elapsed: Boolean!
+  isRecurring: Boolean!
+
+  """"""
+  relapseTime: BigInt
+  totalCount: Int
+  pastCount: Int
+  checkinOpen: Boolean!
+}
+
+"""
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime
+
+"""
+The `BigInt` scalar type represents non-fractional whole numeric values.
+`BigInt` is not constrained to 32-bit like the `Int` type and thus is a less
+compatible type.
+"""
+scalar BigInt
+
+type PrizeType {
+  id: ID!
+  name: String!
+  description: String!
+  image: String
+}
+
+type GradePoints {
+  freshman: Int!
+  sophomore: Int!
+  junior: Int!
+  senior: Int!
+}
+
+type AvailableStudentType {
+  studentId: Int!
+  lastName: String!
+  firstName: String!
+  graduationYear: Int!
+}
+
+type BonusPointsType {
+  id: ID!
+  student: StudentType!
+  reason: String!
+  points: Int!
+  dateIssued: DateTime!
+}
+
+type Mutation {
+  tokenAuth(username: String!, password: String!): CreateTokenWithJWT
+  verifyToken(token: String): VerifyTokenWithJWT
+  createEvent(endTime: DateTime!, isRecurring: Boolean!, location: String!, name: String!, startTime: DateTime!): CreateEventMutation
+  createAvailableStudent(firstName: String!, graduationYear: Int!, lastName: String!, studentId: Int!): CreateAvailableStudentMutation
+  createStudent(email: String!, password: String!, studentId: Int!): CreateStudentMutation
+  updateEvent(endTime: DateTime, id: ID!, isRecurring: Boolean, location: String, name: String, pastCount: Int, startTime: DateTime, totalCount: Int): UpdateEventMutation
+  forceUpdateEventPoints: ForceUpdateEventPointsMutation
+  updateStudent(firstName: String, graduationYear: Int, lastName: String, studentId: Int!): UpdateStudentMutation
+  addStudentToEvent(eventId: ID!, studentId: Int!): AddStudentToEventMutation
+  removeStudentFromEvent(eventId: ID!, studentId: Int!): RemoveStudentFromEventMutation
+  deleteAvailableStudent(studentId: Int!): DeleteAvailableStudentMutation
+  deleteStudent(studentId: Int!): DeleteStudentMutation
+  deleteEvent(id: ID!): DeleteEventMutation
+  createPrize(description: String!, image: Upload, name: String!, studentId: Int): CreatePrizeMutation
+  updatePrize(description: String, id: ID!, image: Upload, name: String, studentId: Int): UpdatePrizeMutation
+  deletePrize(id: ID!): DeletePrizeMutation
+  endEventEarly(id: ID!): EndEventEarlyMutation
+  addStaffToStudent(studentId: Int!): AddStaffToStudentMutation
+  createBonusPoints(description: String!, points: Int!, studentId: Int!): CreateBonusPointsMutation
+  updateBonusPoints(id: ID!, points: Int, reason: String, studentId: Int): UpdateBonusPointsMutation
+  deleteBonusPoints(id: ID!): DeleteBonusPointsMutation
+}
+
+type CreateTokenWithJWT {
+  payload: GenericScalar!
+  refreshExpiresIn: Int!
+  token: String!
+}
+
+"""
+The `GenericScalar` scalar type represents a generic
+GraphQL scalar value that could be:
+String, Boolean, Int, Float, List or Object.
+"""
+scalar GenericScalar
+
+type VerifyTokenWithJWT {
+  payload: GenericScalar!
+}
+
+type CreateEventMutation {
+  event: EventType!
+}
+
+type CreateAvailableStudentMutation {
+  availableStudent: AvailableStudentType!
+}
+
+type CreateStudentMutation {
+  student: StudentType!
+  token: String!
+}
+
+type UpdateEventMutation {
+  event: EventType!
+}
+
+type ForceUpdateEventPointsMutation {
+  success: Boolean!
+}
+
+type UpdateStudentMutation {
+  student: StudentType!
+}
+
+type AddStudentToEventMutation {
+  event: EventType!
+  student: StudentType!
+}
+
+type RemoveStudentFromEventMutation {
+  event: EventType!
+  student: StudentType!
+}
+
+type DeleteAvailableStudentMutation {
+  availableStudent: AvailableStudentType!
+}
+
+type DeleteStudentMutation {
+  student: StudentType!
+}
+
+type DeleteEventMutation {
+  event: EventType!
+}
+
+type CreatePrizeMutation {
+  prize: PrizeType!
+}
+
+"""
+Create scalar that ignores normal serialization/deserialization, since
+that will be handled by the multipart request spec
+"""
+scalar Upload
+
+type UpdatePrizeMutation {
+  prize: PrizeType!
+}
+
+type DeletePrizeMutation {
+  prize: PrizeType!
+}
+
+type EndEventEarlyMutation {
+  event: EventType!
+}
+
+type AddStaffToStudentMutation {
+  student: StudentType!
+}
+
+type CreateBonusPointsMutation {
+  bonusPoints: BonusPointsType!
+}
+
+type UpdateBonusPointsMutation {
+  bonusPoints: BonusPointsType!
+}
+
+type DeleteBonusPointsMutation {
+  bonusPoints: BonusPointsType!
+}

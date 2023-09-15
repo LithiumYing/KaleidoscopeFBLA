@@ -1,0 +1,29 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div class="app-csvimport module">
+  <div class="module-content">
+    <h1 style="font-size: 2em; font-weight: bold; color: #333;">Import Available Students</h1>
+    {% if form.errors %}
+      <div class="errors">
+        <ul>
+          {% for field in form %}
+            {% for error in field.errors %}
+              <li>{{ field.label }}: {{ error }}</li>
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+    <form enctype="multipart/form-data" method="POST" action="{% url 'admin:fbla_availablestudent_import_data'%}">
+      {% csrf_token %}
+      <div class="form-row">
+        <label for="{{ form.csvfile.id_for_label }}" style="font-size: 1.2em; font-weight: bold; color: rgb(51, 51, 51);">{{ form.csvfile.label }}:</label>
+        {{ form.csvfile }}
+        <p style="font-size: 0.8em;">{{ form.csvfile.help_text }}</p>
+      </div>
+      <div style="margin-top: 20px;"><input type="submit" value="Import" class="button"/></div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,170 @@
+{% block content %}
+<head>
+    <title>Help Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            align-items: stretch;
+            height: 100vh;
+        }
+
+        .sidebar {
+            flex: 0 0 30%;
+            background-color: #f1f1f1;
+            padding: 20px;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .sidebar h3 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .content {
+            flex: 1;
+            background-color: #fff;
+            padding: 20px;
+            overflow-y: auto;
+            font-size: 16px;
+        }
+
+        .question {
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .question:hover {
+            text-decoration: underline;
+            color: #1b1b1c;
+        }
+
+        .answer {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .answer.welcome {
+            display: block;
+        }
+
+        .answer h3 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .answer h3:hover {
+            text-decoration: underline;
+            color: #1b1b1c;
+        }
+
+        .answer .body {
+            font-size: 17px;
+            color: black;
+        }
+
+        .answer .body h4 {
+            font-size: 108.5%
+        }
+
+        .answer img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .answer-step {
+            font-size: 105%
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h3>Questions</h3>
+            <div class="question" onclick="toggleAnswer('answer1')">How do I select an event?</div>
+            <div class="question" onclick="toggleAnswer('answer2')">How do I create an event?</div>
+            <div class="question" onclick="toggleAnswer('answer3')">Why isn’t my event showing up?
+            </div>
+        </div>
+        <div class="content">
+            <div class="answer welcome" id="welcome">
+                <h3>Help Page for Kiosk</h3>
+                <div class="body">
+                    <p>Welcome to the help page. Please select a question from the left-hand bar to get help with whatever you are trying to do.</p>
+                </div>
+            </div>
+            <div class="answer" id="answer1">
+                <h3 onclick="toggleAnswer('answer1')">How do I select an event?</h3>
+                <div class="body">
+                    <p class="answer-step">Step 1</p>
+                    <p>Click on the dropdown. This will show all the available events.</p>
+                    <img src="https://i.imgur.com/cj20L8Z.png" alt="Step 1" width="400">
+                    <p class="answer-step">Step 2</p>
+                    <p>Find the event, and click on it to select the event. </p>
+                    <img src="https://i.imgur.com/F5GDtkl.png" alt="Step 2" width="400"> />
+                    <p class="answer-step">Step 3</p>
+                    <p>Click on the continue button. The sign in/out screen will appear, and students can then begin
+                        signing in/out. </p>
+                    <img src="https://i.imgur.com/dY9INHS.png" alt="Step 3" width="400" />
+
+                </div>
+            </div>
+            <div class="answer" id="answer2">
+                <h3 onclick="toggleAnswer('answer2')">How do I create an event?</h3>
+                <div class="body">
+                    <p class="answer-step">Step 1</p>
+                    <p>Head over to the <a href="https://kaleidoscope-fbla.herokuapp.com/admin/">admin page</a>. </p>
+                    <p class="answer-step"> Step 2</p>
+                    <p>Click "Events".</p>
+                    <img src="https://i.imgur.com/4UTl23H.png" alt="Step 2" width="400">
+                    <p class="answer-step">Step 3</p>
+                    <p>Click "Add Event" in the top right corner.</p>
+                    <img src="https://i.imgur.com/4w4mkhs.png" alt="Step 3" width="400">
+                    <p class="answer-step">Step 3</p>
+                    <p>Enter all the info for the event you want to add, then click "Save".</p>
+                    <img src="https://i.imgur.com/V1cw0iI.png" alt="Step 4" width="400">
+                </div>
+            </div>
+            <div class="answer" id="answer3">
+                <h3 onclick="toggleAnswer('answer3')">Why isn't my event showing up?</h3>
+                <div class="body">
+                    <p>The kiosk software will only show events that are available to sign in. If an event isn't showing
+                        up, check on the <a href="https://kaleidoscope-fbla.herokuapp.com/admin/">admin panel</a>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAnswer(answerId) {
+            const answer = document.getElementById(answerId);
+            const displayStyle = answer.style.display;
+
+            const answers = document.getElementsByClassName("answer");
+            for (var i = 0; i < answers.length; i++) {
+                answers[i].style.display = "none";
+            }
+            const welcome_style = document.getElementById("welcome").style;
+
+            if (displayStyle === "block") {
+                answer.style.display = "none";
+                welcome_style.display = "block";
+            } else {
+                answer.style.display = "block";
+                welcome_style.display = "none";
+            }
+        }
+    </script>
+</body>
+{% endblock %}
