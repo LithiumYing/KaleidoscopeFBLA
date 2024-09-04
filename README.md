@@ -3,8 +3,8 @@ FBLA NLC 2023 Project<br>
 5th Place National Winner in Coding and Programing
 
 # Developer Credits
-Backend - Ethan Sanders
-Mobile App - Patrick DeCabooter
+Backend - Ethan Sanders<br>
+Mobile App - Patrick DeCabooter<br>
 Kiosk Client - Li Ying
 
 ## Libraries Used
