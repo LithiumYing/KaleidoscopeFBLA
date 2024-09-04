@@ -1,6 +1,11 @@
 # Kaleidoscope
 FBLA NLC 2023 Project<br>
-5th Place National Winner
+5th Place National Winner in Coding and Programing
+
+# Developer Credits
+Backend - Ethan Sanders
+Mobile App - Patrick DeCabooter
+Kiosk Client - Li Ying
 
 ## Libraries Used
 ### Backend/Admin Panel
